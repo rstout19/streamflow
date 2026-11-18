@@ -1,27 +1,30 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-data_provo = np.genfromtxt('June-2021-Provo-River-Streamflow-Rates.csv', delimiter=',', dtype=str, skip_header=1)
 
-x = data_provo[:, 0]
-y_1 = data_provo[:, 1].astype(float)
-y_2 = data_provo[:, 2].astype(float)
-y_3 = data_provo[:, 3].astype(float)
-y_4 = data_provo[:, 4].astype(float)
-y_5 = data_provo[:, 5].astype(float)
+def load_streamflow(filename):
+    """Read the streamflow CSV. Return the dates and a 2D array of flows (cfs), one column per gauge."""
+    data = np.genfromtxt(filename, delimiter=",", dtype=str, skip_header=1)
+    dates = data[:, 0]
+    flows = data[:, 1:6].astype(float)
+    return dates, flows
 
-step = 250
-plt.plot(x, y_1, label='Site 10163000')
-plt.plot(x, y_2, label='Site 10155200')
-plt.plot(x, y_3, label='Site 10155500')
-plt.plot(x, y_4, label='Site 10154200')
-plt.plot(x, y_5, label='Site 10155000')
 
-plt.title('Provo River Streamflow Rates - June 2021')
-plt.xlabel('Date')
-plt.ylabel('Discharge (cfs)')
+def plot_streamflow(dates, flows, sites):
+    """Plot the flow at each gauge, with the same title, labels, and formatting as the Matplotlib HW."""
+    step = 250
+    for index, site in enumerate(sites):
+        plt.plot(dates, flows[:, index], label=f'Site {site}')
 
-plt.xticks(ticks=range(0, len(x), step), labels=x[::step], rotation=45)
-plt.legend()
-plt.grid(True)
-plt.show()
+    plt.title('Provo River Streamflow Rates - June 2021')
+    plt.xlabel('Date')
+    plt.ylabel('Discharge (cfs)')
+    plt.xticks(ticks=range(0, len(dates), step), labels=dates[::step], rotation=45)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+
+sites = ["10163000", "10155200", "10155500", "10154200", "10155000"]
+dates, flows = load_streamflow("June-2021-Provo-River-Streamflow-Rates.csv")
+plot_streamflow(dates, flows, sites)
