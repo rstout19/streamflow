@@ -22,6 +22,7 @@ def plot_streamflow(dates, flows, sites):
     plt.xticks(ticks=range(0, len(dates), step), labels=dates[::step], rotation=45)
     plt.legend()
     plt.grid(True)
+    plt.savefig("provo_streamflow.png", dpi=150, bbox_inches="tight")
     plt.show()
 
 
