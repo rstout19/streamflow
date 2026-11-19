@@ -51,3 +51,10 @@ sites = ["10163000", "10155200", "10155500", "10154200", "10155000"]
 dates, flows = load_streamflow("June-2021-Provo-River-Streamflow-Rates.csv")
 plot_streamflow(dates, flows, sites)
 summarize(dates, flows, sites)
+
+threshold = float(input("\nEnter a flow threshold (cfs): "))
+
+print(f"\nHours above {threshold} cfs in June 2021:")
+for i, site in enumerate(sites):
+    hours_above = np.sum(flows[:, i] > threshold) * 0.25
+    print(f"Gauge {site}: {hours_above:.2f} hours")
